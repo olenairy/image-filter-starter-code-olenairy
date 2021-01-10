@@ -27,16 +27,20 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   //    image_url: URL of a publicly accessible image
   // RETURNS
   //   the filtered image file [!!TIP res.sendFile(filteredpath); might be useful]
-
+ // req: Request
   /**************************************************************************** */
 
 
   app.get( "/filteredimage/", async ( req, res, next ) => {
-    const { image_url } = req.query;
+
+    let image_url: string = req.query.image_url;
+    //const { image_url } = req.query;
+    let url_req_text: string = 'Image url is required';
+    let welcome_text: string = 'Welcome to the Udagram!';
     
     if (!image_url) {
       
-      return res.status(400).send('Image url is required');
+      return res.status(400).send(url_req_text);
     
     }
     
@@ -46,6 +50,9 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
     res.sendFile(file);
 
     res.on('finish', () => deleteLocalFiles([file]));
+
+    return res.status(200).send(welcome_text);
+  
   });
   //! END @TODO1
   
